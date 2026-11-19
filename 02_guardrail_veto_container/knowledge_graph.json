@@ -1,0 +1,35 @@
+{
+  "vault_id": "vault.customer.guardrail.procurement_four_eyes_sod",
+  "nodes": [
+    {
+      "id": "root_sod_guard",
+      "label": "Konzern-Richtlinie Einkauf & Segregation of Duties (SoD)",
+      "type": "organ_root",
+      "summary": "Mathematischer Veto-Filter vor jeder ERP-Bestellauslösung."
+    },
+    {
+      "id": "smt_limit_10k",
+      "label": "Schwellenwert Einzelvollmacht: 10.000,00 EUR netto",
+      "type": "smt_invariant",
+      "summary": "Ab 10.000,01 EUR greift die zwingende 4-Augen-Hardware-Signatur."
+    },
+    {
+      "id": "smt_no_self_approve",
+      "label": "Verbot der Eigenfreigabe (requester_id != approver_id)",
+      "type": "smt_invariant",
+      "summary": "Verhindert Umgehung durch denselben Sachbearbeiter."
+    }
+  ],
+  "edges": [
+    {
+      "source": "root_sod_guard",
+      "target": "smt_limit_10k",
+      "relation": "ENFORCES_RULE"
+    },
+    {
+      "source": "root_sod_guard",
+      "target": "smt_no_self_approve",
+      "relation": "ENFORCES_RULE"
+    }
+  ]
+}

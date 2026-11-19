@@ -1,0 +1,18 @@
+{
+  "vault_id": "vault.customer.codec.qdf_quality_protocol",
+  "solver": "Z3_SMT_LIB2",
+  "invariants": [
+    {
+      "id": "INV-QDF-ROUNDTRIP",
+      "expression": "decode_encode_deviation_um == 0.0",
+      "severity": "CRITICAL",
+      "description": "Mathematische Roundtrip-Garantie: Keine Rundungsverluste bei Messwerten in Mikrometern (µm)."
+    },
+    {
+      "id": "INV-QDF-TOLERANCE",
+      "expression": "abs(measured_deviation_mm) <= tolerance_upper_mm",
+      "severity": "HIGH",
+      "description": "Prüfmerkmale außerhalb des Toleranzbandes müssen zwingend als NOK markiert werden."
+    }
+  ]
+}

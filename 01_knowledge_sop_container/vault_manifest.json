@@ -1,0 +1,77 @@
+{
+  "$schema": "https://axongraph.com/schemas/vault-manifest/v2.json",
+  "manifest_version": "2.0.0",
+  "vault": {
+    "id": "vault.customer.knowledge.flange_assembly_wn104",
+    "name": "Kunden-Wissens-Container: Werksnorm WN-104 Hochdruck-Flanschmontage",
+    "version": "1.0.0",
+    "category": "KNOWLEDGE_SPEC",
+    "container_class": "KNOWLEDGE_SOP",
+    "organ_type": "KNOWLEDGE_BRAIN",
+    "io_direction": "INTERNAL",
+    "industry": "MECHANICAL_ENGINEERING",
+    "security_class": "REVISION_SAFE_ISO",
+    "description": "Deklarativer Wissens- & SOP-Container für Drehmomentstufen, Dichtungsauswahl und Prüfdrücke nach Werksnorm WN-104 (0 Zeilen Python-Code erforderlich).",
+    "raw_data_formatted": "14.2 MB",
+    "vault_size_formatted": "6.4 KB",
+    "compression_rate": "99.9%"
+  },
+  "dependencies": {
+    "suite_id": "suite.customer.integration_reference",
+    "suite_name": "Customer Reference Integration Suite",
+    "required_vaults": [],
+    "optional_peer_organs": []
+  },
+  "capabilities": {
+    "codecs": [
+      "knowledge_flange_torque_lookup",
+      "sop_step_verification"
+    ],
+    "invariants": [
+      "tightening_torque_nm <= 420.0",
+      "tightening_stages >= 3"
+    ]
+  },
+  "data_footprint": {
+    "raw_source_size": "14.2 MB",
+    "compiled_emp_size": "6.4 KB",
+    "compression_ratio": "99.9%",
+    "node_count": 3,
+    "invariant_count": 2
+  },
+  "build_provenance": {
+    "compiler_toolchain": "AxonGraph-EMIL-Customer-SDK-Compiler-v2.0"
+  },
+  "publisher": {
+    "id": "pub.customer.enterprise",
+    "name": "Customer Enterprise Engineering Team",
+    "tier": "THIRD_PARTY_VERIFIED",
+    "pqc_algorithm": "ML-DSA-65"
+  },
+  "licensee": {
+    "company_name": "Muster-Industrie GmbH & Co. KG",
+    "organization_unit": "Werk 1 Stuttgart",
+    "vat_id": "DE123456789",
+    "contract_id": "AXON-2026-CUST-REF",
+    "license_tier": "ENTERPRISE_ANNUAL_SUB"
+  },
+  "hardware_binding": {
+    "node_lock_type": "MACHINE_TPM_ASYMMETRIC",
+    "target_machine_id": "ANY_NODE",
+    "anti_cloning_seed": 20261118
+  },
+  "vector_watermark": {
+    "enabled": true,
+    "traitor_tracing_id": "TRC-MUSTER-INDUSTRIE-vault.customer.knowledge.flange_assembly_wn104"
+  },
+  "guardrails": {
+    "vector_veto_enforced": true,
+    "read_only_acl": true,
+    "employee_monitoring_blocked": true
+  },
+  "integrity_and_signatures": {
+    "payload_sha256": "",
+    "store_signature_algorithm": "ML-DSA-65",
+    "store_digital_signature": ""
+  }
+}

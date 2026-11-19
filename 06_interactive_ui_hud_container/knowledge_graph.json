@@ -1,0 +1,24 @@
+{
+  "vault_id": "vault.customer.ui.smart_press_cockpit",
+  "nodes": [
+    {
+      "id": "root_press_ui",
+      "label": "EPL 2.0 Leitstand-UI: Smart Presswerk Linie 4",
+      "type": "organ_root",
+      "summary": "Stellt sowohl EPL-2.0-Karten für das EMIL Omni-HUD als auch ein interaktives HTML5-Dashboard bereit."
+    },
+    {
+      "id": "ui_release_gate",
+      "label": "Proof-Gated UI Actuators (release_trigger: on_proof_success)",
+      "type": "smt_invariant",
+      "summary": "Sperrt alle Freigabe-Buttons physisch im UI, sobald eine Z3-Invariante verletzt ist."
+    }
+  ],
+  "edges": [
+    {
+      "source": "root_press_ui",
+      "target": "ui_release_gate",
+      "relation": "ENFORCES_RULE"
+    }
+  ]
+}

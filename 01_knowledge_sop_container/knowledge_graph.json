@@ -1,0 +1,35 @@
+{
+  "vault_id": "vault.customer.knowledge.flange_assembly_wn104",
+  "nodes": [
+    {
+      "id": "root_wn104",
+      "label": "Werksnorm WN-104: Hochdruck-Flanschmontage PN 160",
+      "type": "organ_root",
+      "summary": "Verbindliche Montage- und Prüfvorschrift für metallisch dichtende Hochdruckflansche."
+    },
+    {
+      "id": "rule_torque_m24",
+      "label": "Soll-Drehmoment M24 (10.9, MoS2-geschmiert): 390 Nm ± 10 Nm",
+      "type": "rule",
+      "summary": "Stufe 1: 120 Nm, Stufe 2: 270 Nm, Stufe 3: 390 Nm über Kreuz."
+    },
+    {
+      "id": "limit_hydro_test",
+      "label": "Hydrostatischer Prüfdruck: 240 bar (1,5x PN 160) für 30 Minuten",
+      "type": "limit",
+      "summary": "Kein Druckabfall > 0,2 bar zulässig."
+    }
+  ],
+  "edges": [
+    {
+      "source": "root_wn104",
+      "target": "rule_torque_m24",
+      "relation": "ENFORCES_RULE"
+    },
+    {
+      "source": "root_wn104",
+      "target": "limit_hydro_test",
+      "relation": "ENFORCES_RULE"
+    }
+  ]
+}

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMIL Container UI — Kunden-Leitstand & EPL 2.0 Cockpit</title>
+    <style>
+        :root {
+            --bg-base: #070b14;
+            --bg-panel: #0f172a;
+            --bg-card: #1e293b;
+            --border-subtle: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-purple: #8b5cf6;
+            --status-ok: #10b981;
+            --status-warn: #f59e0b;
+            --status-veto: #ef4444;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: radial-gradient(circle at top right, #1e1b4b 0%, var(--bg-base) 55%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 28px;
+        }
+        .container { max-width: 1280px; margin: 0 auto; }
+        .top-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(15, 23, 42, 0.85); border: 1px solid var(--border-subtle);
+            border-radius: 14px; padding: 18px 24px; margin-bottom: 24px;
+            backdrop-filter: blur(12px);
+        }
+        .brand-badge {
+            display: inline-flex; align-items: center; gap: 10px;
+            font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.12); border: 1px solid rgba(6, 182, 212, 0.35);
+            padding: 6px 12px; border-radius: 999px;
+        }
+        .top-title h1 { font-size: 1.35rem; margin-top: 8px; font-weight: 700; }
+        .top-title p { font-size: 0.86rem; color: var(--text-muted); margin-top: 4px; }
+        .meta-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+        .meta-pill {
+            background: var(--bg-card); border: 1px solid var(--border-subtle);
+            padding: 8px 14px; border-radius: 10px; font-size: 0.8rem; color: var(--text-muted);
+        }
+        .meta-pill strong { color: var(--text-main); font-family: monospace; }
+
+        .main-grid {
+            display: grid; grid-template-columns: 1.05fr 1.25fr; gap: 24px;
+        }
+        @media (max-width: 980px) { .main-grid { grid-template-columns: 1fr; } }
+
+        .panel {
+            background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-subtle);
+            border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 18px;
+        }
+        .panel-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.07); padding-bottom: 12px;
+        }
+        .panel-header h2 { font-size: 1.05rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+
+        .control-group {
+            background: rgba(30, 41, 59, 0.55); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px; padding: 14px 16px; transition: border-color 0.2s;
+        }
+        .control-group.violated {
+            border-color: var(--status-veto);
+            background: rgba(239, 68, 68, 0.08);
+        }
+        .control-label {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.88rem; font-weight: 600; margin-bottom: 8px;
+        }
+        .control-val {
+            font-family: monospace; font-size: 0.95rem; font-weight: 700;
+            padding: 2px 8px; border-radius: 6px; background: rgba(15, 23, 42, 0.8);
+        }
+        .control-limit {
+            font-size: 0.76rem; color: var(--text-muted); margin-top: 6px;
+            display: flex; justify-content: space-between;
+        }
+        input[type="range"] {
+            width: 100%; accent-color: var(--accent-cyan); cursor: pointer;
+        }
+        .toggle-row {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);
+        }
+        .fido-btn {
+            padding: 7px 14px; border-radius: 8px; border: 1px solid var(--status-ok);
+            background: rgba(16, 185, 129, 0.15); color: #34d399; font-weight: 600;
+            font-size: 0.8rem; cursor: pointer; transition: all 0.15s;
+        }
+        .fido-btn.off {
+            border-color: var(--status-warn); background: rgba(245, 158, 11, 0.12); color: #fbbf24;
+        }
+
+        /* EPL 2.0 HUD Card */
+        .epl-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+            border: 2px solid var(--status-ok); border-radius: 14px; padding: 20px;
+            transition: all 0.25s ease;
+        }
+        .epl-card.veto-active {
+            border-color: var(--status-veto);
+            box-shadow: 0 0 28px rgba(239, 68, 68, 0.22);
+        }
+        .epl-header {
+            display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+            margin-bottom: 14px;
+        }
+        .epl-badge {
+            padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 700;
+            font-family: monospace; white-space: nowrap;
+        }
+        .epl-badge.ok {
+            background: rgba(16, 185, 129, 0.18); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.45);
+        }
+        .epl-badge.veto {
+            background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+        .epl-summary {
+            font-size: 0.9rem; line-height: 1.55; color: #e2e8f0;
+            background: rgba(7, 11, 20, 0.55); padding: 14px; border-radius: 10px;
+            border-left: 4px solid var(--accent-cyan); margin-bottom: 16px;
+        }
+        .epl-metrics {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;
+        }
+        .metric-box {
+            background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 10px; text-align: center;
+        }
+        .metric-box .m-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; }
+        .metric-box .m-val { font-size: 0.98rem; font-weight: 700; margin-top: 4px; font-family: monospace; }
+
+        .actuator-bar {
+            display: flex; gap: 12px; flex-wrap: wrap;
+        }
+        .actuator-btn {
+            flex: 1; min-width: 210px; padding: 12px 16px; border-radius: 10px;
+            font-size: 0.86rem; font-weight: 700; cursor: pointer; border: none;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: all 0.2s;
+        }
+        .actuator-btn.primary {
+            background: linear-gradient(135deg, #10b981, #059669); color: #ffffff;
+        }
+        .actuator-btn.secondary {
+            background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+        .actuator-btn:disabled {
+            background: rgba(239, 68, 68, 0.12) !important;
+            color: #f87171 !important;
+            border: 1px dashed rgba(239, 68, 68, 0.45) !important;
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
+
+        .json-box {
+            background: #050811; border: 1px solid var(--border-subtle);
+            border-radius: 10px; padding: 14px; font-family: 'Fira Code', Consolas, monospace;
+            font-size: 0.78rem; color: #38bdf8; max-height: 230px; overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .preset-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .preset-btn {
+            padding: 6px 11px; border-radius: 8px; font-size: 0.76rem; font-weight: 600;
+            background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-subtle);
+            cursor: pointer;
+        }
+        .preset-btn:hover { border-color: var(--accent-cyan); }
+        .toast {
+            display: none; margin-top: 12px; padding: 12px 14px; border-radius: 10px;
+            background: rgba(16, 185, 129, 0.15); border: 1px solid var(--status-ok);
+            color: #34d399; font-size: 0.84rem; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top-bar">
+        <div class="top-title">
+            <span class="brand-badge">⚡ EMIL CONTAINER UI &bull; EPL 2.0 STANDARD</span>
+            <h1>Kunden-Leitstand: Smart Presswerk &amp; Qualitäts-Freigabe</h1>
+            <p>Container-ID: <code>vault.customer.ui.smart_press_cockpit</code> &bull; Beweisgebundene UI-Freigabe (<code>release_trigger: "on_proof_success"</code>)</p>
+        </div>
+        <div class="meta-pills">
+            <div class="meta-pill">VRAM-Bedarf: <strong>0 MB (CPU)</strong></div>
+            <div class="meta-pill">Z3-Solver Latenz: <strong>0.4 ms</strong></div>
+            <div class="meta-pill">PQC-Siegel: <strong>ML-DSA-65</strong></div>
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <!-- LEFT: SENSOR & PARAMETER INPUTS -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>🎛️ 1. Echtzeit-Maschinen- &amp; Prozess-Parameter (Input)</h2>
+                <div class="preset-row">
+                    <button class="preset-btn" onclick="applyPreset('normal')">🟢 Normalbetrieb</button>
+                    <button class="preset-btn" onclick="applyPreset('force_veto')">🔴 Überlast-Test (920 kN)</button>
+                    <button class="preset-btn" onclick="applyPreset('sod_veto')">🔐 4-Augen-Test (42.000 €)</button>
+                </div>
+            </div>
+
+            <!-- Slider 1: Press Force -->
+            <div class="control-group" id="grp-force">
+                <div class="control-label">
+                    <span>Hydraulische Presskraft (SPS Register <code>DB20.DBD0</code>)</span>
+                    <span class="control-val" id="val-force">620 kN</span>
+                </div>
+                <input type="range" id="slider-force" min="100" max="1000" step="10" value="620" oninput="updateCockpit()">
+                <div class="control-limit">
+                    <span>Z3-Invariante: <code>INV-PRESS-FORCE</code></span>
+                    <span>Erlaubt: <strong>&le; 850 kN</strong></span>
+                </div>
+            </div>
+
+            <!-- Slider 2: Tool Temp -->
+            <div class="control-group" id="grp-temp">
+                <div class="control-label">
+                    <span>Werkzeug-Kerntemperatur (Sensor <code>PT100-CH2</code>)</span>
+                    <span class="control-val" id="val-temp">115 °C</span>
+                </div>
+                <input type="range" id="slider-temp" min="20" max="240" step="5" value="115" oninput="updateCockpit()">
+                <div class="control-limit">
+                    <span>Z3-Invariante: <code>INV-TOOL-TEMP</code></span>
+                    <span>Erlaubt: <strong>&le; 180 °C</strong></span>
+                </div>
+            </div>
+
+            <!-- Slider 3: Light Curtain Distance -->
+            <div class="control-group" id="grp-dist">
+                <div class="control-label">
+                    <span>Schutzlichtgitter-Abstand Werker (Laser <code>SICK-LC1</code>)</span>
+                    <span class="control-val" id="val-dist">550 mm</span>
+                </div>
+                <input type="range" id="slider-dist" min="50" max="800" step="10" value="550" oninput="updateCockpit()">
+                <div class="control-limit">
+                    <span>Z3-Invariante: <code>INV-LIGHT-CURTAIN</code></span>
+                    <span>Erlaubt: <strong>&ge; 200 mm</strong></span>
+                </div>
+            </div>
+
+            <!-- Slider 4: Batch Value & FIDO2 -->
+            <div class="control-group" id="grp-batch">
+                <div class="control-label">
+                    <span>SAP Chargen-Freigabewert (<code>order_batch_eur</code>)</span>
+                    <span class="control-val" id="val-batch">14.500 €</span>
+                </div>
+                <input type="range" id="slider-batch" min="2000" max="60000" step="500" value="14500" oninput="updateCockpit()">
+                <div class="control-limit">
+                    <span>Z3-Invariante: <code>INV-BATCH-SOD</code></span>
+                    <span>Ab <strong>&gt; 25.000 €</strong> ist FIDO2-Signatur Pflicht</span>
+                </div>
+                <div class="toggle-row">
+                    <span style="font-size: 0.82rem; color: var(--text-muted);">🔐 4-Augen FIDO2 Hardware-Token (Qualitätsleitung):</span>
+                    <button id="btn-fido" class="fido-btn" onclick="toggleFido()">✓ FIDO2 Token gesteckt</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: EPL 2.0 RENDERED OUTPUT & PROOF-GATED ACTUATORS -->
+        <div class="panel">
+            <div class="panel-header">
+                <h2>🖥️ 2. Gerenderte EPL 2.0 Container-UI (Omni-HUD &amp; Web-Ansicht)</h2>
+                <span style="font-size: 0.78rem; color: var(--text-muted);">Live-Ausgabe von <code>vault_runtime.py</code></span>
+            </div>
+
+            <div class="epl-card" id="epl-card">
+                <div class="epl-header">
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">EPL 2.0 WORKPLACE CARD</div>
+                        <h3 id="epl-title" style="font-size: 1.15rem; margin-top: 4px;">Presslinie 4 — Bereit für Hub-Freigabe</h3>
+                    </div>
+                    <span class="epl-badge ok" id="epl-badge">✓ Z3 SAT &bull; FREIGABE</span>
+                </div>
+
+                <div class="epl-summary" id="epl-summary"></div>
+
+                <div class="epl-metrics">
+                    <div class="metric-box">
+                        <div class="m-label">Presskraft</div>
+                        <div class="m-val" id="m-force">620 kN</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="m-label">Temperatur</div>
+                        <div class="m-val" id="m-temp">115 °C</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="m-label">Schutzfeld</div>
+                        <div class="m-val" id="m-dist">550 mm</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="m-label">SMT-Status</div>
+                        <div class="m-val" id="m-smt" style="color: #34d399;">SAT (0.4 ms)</div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 8px;">
+                    ⚡ <strong>Beweisgebundene EPL-Aktuatoren</strong> (<code>release_trigger: "on_proof_success"</code>):
+                </div>
+                <div class="actuator-bar">
+                    <button class="actuator-btn primary" id="act-press" onclick="triggerAction('SPS Hub-Zyklus ausgelöst (DB20.DBX8.0 = TRUE)')">
+                        🚀 Hub-Zyklus starten (SPS Freigabe)
+                    </button>
+                    <button class="actuator-btn secondary" id="act-sap" onclick="triggerAction('Prüfprotokoll mit ML-DSA-65 Signatur in SAP QM01 gebucht')">
+                        📄 Chargen-Protokoll in SAP buchen
+                    </button>
+                </div>
+                <div class="toast" id="action-toast"></div>
+            </div>
+
+            <div>
+                <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px;">
+                    📡 Live EPL 2.0 JSON-Datenstrom (wird vom Container an das EMIL HUD / Web-UI gesendet):
+                </div>
+                <pre class="json-box" id="epl-json"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let fidoSigned = true;
+
+    function toggleFido() {
+        fidoSigned = !fidoSigned;
+        const btn = document.getElementById('btn-fido');
+        if (fidoSigned) {
+            btn.className = 'fido-btn';
+            btn.textContent = '✓ FIDO2 Token gesteckt';
+        } else {
+            btn.className = 'fido-btn off';
+            btn.textContent = '⚠️ Kein FIDO2 Token';
+        }
+        updateCockpit();
+    }
+
+    function applyPreset(mode) {
+        if (mode === 'normal') {
+            document.getElementById('slider-force').value = 620;
+            document.getElementById('slider-temp').value = 115;
+            document.getElementById('slider-dist').value = 550;
+            document.getElementById('slider-batch').value = 14500;
+            if (!fidoSigned) toggleFido();
+        } else if (mode === 'force_veto') {
+            document.getElementById('slider-force').value = 920;
+            document.getElementById('slider-temp').value = 130;
+            document.getElementById('slider-dist').value = 480;
+            document.getElementById('slider-batch').value = 14500;
+        } else if (mode === 'sod_veto') {
+            document.getElementById('slider-force').value = 640;
+            document.getElementById('slider-temp').value = 120;
+            document.getElementById('slider-dist').value = 500;
+            document.getElementById('slider-batch').value = 42000;
+            if (fidoSigned) toggleFido();
+        }
+        updateCockpit();
+    }
+
+    function triggerAction(msg) {
+        const toast = document.getElementById('action-toast');
+        toast.style.display = 'block';
+        toast.textContent = '✅ AUSGEFÜHRT: ' + msg + ' (Audit-Hash: 0x9F4A...82E1)';
+        setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+
+    function updateCockpit() {
+        const force = parseFloat(document.getElementById('slider-force').value);
+        const temp = parseFloat(document.getElementById('slider-temp').value);
+        const dist = parseFloat(document.getElementById('slider-dist').value);
+        const batch = parseFloat(document.getElementById('slider-batch').value);
+
+        document.getElementById('val-force').textContent = force + ' kN';
+        document.getElementById('val-temp').textContent = temp + ' °C';
+        document.getElementById('val-dist').textContent = dist + ' mm';
+        document.getElementById('val-batch').textContent = batch.toLocaleString('de-DE') + ' €';
+
+        const violations = [];
+        const vForce = force > 850;
+        const vTemp = temp > 180;
+        const vDist = dist < 200;
+        const vBatch = batch > 25000 && !fidoSigned;
+
+        document.getElementById('grp-force').classList.toggle('violated', vForce);
+        document.getElementById('grp-temp').classList.toggle('violated', vTemp);
+        document.getElementById('grp-dist').classList.toggle('violated', vDist);
+        document.getElementById('grp-batch').classList.toggle('violated', vBatch);
+
+        if (vForce) violations.push("INV-PRESS-FORCE: Presskraft " + force + " kN überschreitet das zulässige Werkzeug-Maximum von 850 kN.");
+        if (vTemp) violations.push("INV-TOOL-TEMP: Werkzeugtemperatur " + temp + " °C überschreitet das thermische Limit von 180 °C.");
+        if (vDist) violations.push("INV-LIGHT-CURTAIN: Schutzlichtgitter-Abstand (" + dist + " mm < 200 mm) verletzt — sofortiger Hardware-Stopp!");
+        if (vBatch) violations.push("INV-BATCH-SOD: Chargenwert " + batch.toLocaleString('de-DE') + " € (> 25.000 €) erfordert eine aktive 4-Augen FIDO2-Signatur.");
+
+        const isOk = violations.length === 0;
+        const card = document.getElementById('epl-card');
+        const badge = document.getElementById('epl-badge');
+        const title = document.getElementById('epl-title');
+        const summary = document.getElementById('epl-summary');
+        const btnPress = document.getElementById('act-press');
+        const btnSap = document.getElementById('act-sap');
+
+        document.getElementById('m-force').textContent = force + ' kN';
+        document.getElementById('m-temp').textContent = temp + ' °C';
+        document.getElementById('m-dist').textContent = dist + ' mm';
+        const mSmt = document.getElementById('m-smt');
+
+        if (isOk) {
+            card.classList.remove('veto-active');
+            badge.className = 'epl-badge ok';
+            badge.textContent = '✓ Z3 SAT • FREIGABE';
+            title.textContent = 'Presslinie 4 — Alle Sicherheits- & Compliance-Invarianten erfüllt';
+            summary.innerHTML = 'Alle 4 Z3/SMT-Invarianten (<code>INV-PRESS-FORCE</code>, <code>INV-TOOL-TEMP</code>, <code>INV-LIGHT-CURTAIN</code>, <code>INV-BATCH-SOD</code>) sind mathematisch verifiziert. Die Aktorik-Schalter sind entsperrt (<code>armed: true</code>).';
+            mSmt.textContent = 'SAT (0.4 ms)';
+            mSmt.style.color = '#34d399';
+            btnPress.disabled = false;
+            btnSap.disabled = false;
+            btnPress.textContent = '🚀 Hub-Zyklus starten (SPS Freigabe)';
+            btnSap.textContent = '📄 Chargen-Protokoll in SAP buchen';
+        } else {
+            card.classList.add('veto-active');
+            badge.className = 'epl-badge veto';
+            badge.textContent = '⛔ Z3 VETO • GESPERRT';
+            title.textContent = 'Sicherheits- & Compliance-Veto: Aktorik physisch verriegelt!';
+            summary.innerHTML = '<strong>Folgende Invarianten wurden verletzt:</strong><br>• ' + violations.join('<br>• ');
+            mSmt.textContent = 'UNSAT (VETO)';
+            mSmt.style.color = '#f87171';
+            btnPress.disabled = true;
+            btnSap.disabled = true;
+            btnPress.textContent = '🔒 SPS-Freigabe durch Z3-Veto verriegelt';
+            btnSap.textContent = '🔒 SAP-Buchung durch Z3-Veto verriegelt';
+        }
+
+        const eplPayload = {
+            epl_version: "2.0",
+            vault_id: "vault.customer.ui.smart_press_cockpit",
+            layout: {
+                type: "card",
+                title: title.textContent,
+                badge: { text: badge.textContent, type: isOk ? "SUCCESS" : "ALERT" },
+                metrics: [
+                    { label: "Presskraft", value: force + " kN" },
+                    { label: "Temperatur", value: temp + " °C" },
+                    { label: "Schutzfeld", value: dist + " mm" },
+                    { label: "Chargenwert", value: batch + " EUR" }
+                ],
+                latency_ms: 0.4
+            },
+            machine_actuator_stream: {
+                armed: isOk,
+                release_trigger: "on_proof_success",
+                violated_rules: violations
+            },
+            actuators: [
+                { id: "act_plc_stroke", label: "Hub-Zyklus starten", enabled: isOk, action: "plc.s7.trigger_stroke" },
+                { id: "act_sap_qm", label: "Chargen-Protokoll buchen", enabled: isOk, action: "sap.bapi.qm01_commit" }
+            ]
+        };
+        document.getElementById('epl-json').textContent = JSON.stringify(eplPayload, null, 2);
+    }
+
+    updateCockpit();
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "vault_id": "vault.customer.ui.smart_press_cockpit",
+  "solver": "Z3_SMT_LIB2",
+  "invariants": [
+    {
+      "id": "INV-PRESS-FORCE",
+      "expression": "press_force_kn <= 850.0",
+      "severity": "BLOCKING_VETO",
+      "description": "Hydraulische Presskraft darf 850 kN nicht überschreiten (Werkzeugbruch-Schutz)."
+    },
+    {
+      "id": "INV-TOOL-TEMP",
+      "expression": "tool_temp_c <= 180.0",
+      "severity": "BLOCKING_VETO",
+      "description": "Werkzeug-Kerntemperatur muss <= 180 °C betragen."
+    },
+    {
+      "id": "INV-LIGHT-CURTAIN",
+      "expression": "light_curtain_mm >= 200.0",
+      "severity": "BLOCKING_VETO",
+      "description": "Schutzlichtgitter-Abstand muss >= 200 mm betragen."
+    },
+    {
+      "id": "INV-BATCH-SOD",
+      "expression": "Implies(order_batch_eur > 25000.0, fido2_signed == True)",
+      "severity": "BLOCKING_VETO",
+      "description": "Chargen-Freigaben über 25.000 EUR erfordern einen gesteckten FIDO2-Hardware-Token."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "vault_id": "vault.customer.driver.siemens_s7_opcua_cell",
+  "solver": "Z3_SMT_LIB2",
+  "invariants": [
+    {
+      "id": "INV-DRV-WATCHDOG",
+      "expression": "watchdog_heartbeat_ms <= 50.0",
+      "severity": "CRITICAL",
+      "description": "SPS-Watchdog-Zyklus muss unter 50 ms liegen, sonst fällt die Zelle in den sicheren Stopp."
+    },
+    {
+      "id": "INV-DRV-SPINDLE-RPM",
+      "expression": "target_spindle_rpm <= 12000",
+      "severity": "BLOCKING_VETO",
+      "description": "Schreibzugriff auf Register DB10.DBD4 wird bei Drehzahlen > 12.000 U/min hardwareseitig abgewiesen."
+    }
+  ]
+}

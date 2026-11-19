@@ -1,0 +1,91 @@
+{
+  "$schema": "https://axongraph.com/schemas/vault-manifest/v2.json",
+  "manifest_version": "2.0.0",
+  "vault": {
+    "id": "vault.customer.ui.smart_press_cockpit",
+    "name": "Kunden-UI-Container: Smart Presswerk Leitstand & EPL 2.0 Cockpit",
+    "version": "1.0.0",
+    "category": "WORKPLACE_UI_CONTAINER",
+    "container_class": "ACTUATOR_ACTION",
+    "organ_type": "ACTUATOR_MOTOR",
+    "io_direction": "BIDIRECTIONAL",
+    "industry": "INDUSTRIAL_AUTOMATION",
+    "security_class": "REVISION_SAFE_ISO",
+    "description": "Vollständiger AI Container mit eingebetteter HTML5-Leitstand-UI (ui/cockpit.html) und deklarativer EPL 2.0 Oberfläche (epl_layout.emls.json): Koppelt UI-Schalter direkt an den Z3/SMT-Beweisstatus (release_trigger: on_proof_success).",
+    "raw_data_formatted": "14.2 MB",
+    "vault_size_formatted": "6.4 KB",
+    "compression_rate": "99.9%"
+  },
+  "dependencies": {
+    "suite_id": "suite.customer.integration_reference",
+    "suite_name": "Customer Reference Integration Suite",
+    "required_vaults": [],
+    "optional_peer_organs": []
+  },
+  "capabilities": {
+    "codecs": [
+      "ui_epl_2_0_card_provider",
+      "ui_embedded_web_cockpit",
+      "plc_press_line_release"
+    ],
+    "invariants": [
+      "press_force_kn <= 850.0",
+      "tool_temp_c <= 180.0",
+      "light_curtain_mm >= 200.0",
+      "Implies(order_batch_eur > 25000.0, fido2_signed == True)"
+    ],
+    "ui_manifest": {
+      "epl_version": "2.0",
+      "entry_point": "ui/cockpit.html",
+      "epl_schema_file": "ui/epl_layout.emls.json",
+      "render_modes": [
+        "STANDALONE_BROWSER",
+        "EMIL_WORKPLACE_HUD",
+        "IFRAME_PANEL"
+      ],
+      "release_trigger": "on_proof_success"
+    }
+  },
+  "data_footprint": {
+    "raw_source_size": "14.2 MB",
+    "compiled_emp_size": "6.4 KB",
+    "compression_ratio": "99.9%",
+    "node_count": 2,
+    "invariant_count": 4
+  },
+  "build_provenance": {
+    "compiler_toolchain": "AxonGraph-EMIL-Customer-SDK-Compiler-v2.0"
+  },
+  "publisher": {
+    "id": "pub.customer.enterprise",
+    "name": "Customer Enterprise Engineering Team",
+    "tier": "THIRD_PARTY_VERIFIED",
+    "pqc_algorithm": "ML-DSA-65"
+  },
+  "licensee": {
+    "company_name": "Muster-Industrie GmbH & Co. KG",
+    "organization_unit": "Werk 1 Stuttgart",
+    "vat_id": "DE123456789",
+    "contract_id": "AXON-2026-CUST-REF",
+    "license_tier": "ENTERPRISE_ANNUAL_SUB"
+  },
+  "hardware_binding": {
+    "node_lock_type": "MACHINE_TPM_ASYMMETRIC",
+    "target_machine_id": "ANY_NODE",
+    "anti_cloning_seed": 20261118
+  },
+  "vector_watermark": {
+    "enabled": true,
+    "traitor_tracing_id": "TRC-MUSTER-INDUSTRIE-vault.customer.ui.smart_press_cockpit"
+  },
+  "guardrails": {
+    "vector_veto_enforced": true,
+    "read_only_acl": true,
+    "employee_monitoring_blocked": true
+  },
+  "integrity_and_signatures": {
+    "payload_sha256": "",
+    "store_signature_algorithm": "ML-DSA-65",
+    "store_digital_signature": ""
+  }
+}

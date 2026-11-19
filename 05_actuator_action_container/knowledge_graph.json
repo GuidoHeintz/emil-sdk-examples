@@ -1,0 +1,24 @@
+{
+  "vault_id": "vault.customer.actuator.cobot_safe_palletizer",
+  "nodes": [
+    {
+      "id": "root_cobot_skill",
+      "label": "Closed-Loop Prozeduraler Aktorik-Container: Cobot-Palettierer",
+      "type": "organ_root",
+      "summary": "Vereint Sensorik-Inbound und Aktorik-Outbound im selben Speicherraum (< 1,5 ms)."
+    },
+    {
+      "id": "rule_iso15066_force",
+      "label": "Maximale Kontaktkraft: 65,0 N | Schutzabstand: >= 150,0 mm",
+      "type": "smt_invariant",
+      "summary": "Automatischer Not-Halt (hardware.ep_lock) bei Grenzwertverletzung."
+    }
+  ],
+  "edges": [
+    {
+      "source": "root_cobot_skill",
+      "target": "rule_iso15066_force",
+      "relation": "ENFORCES_RULE"
+    }
+  ]
+}

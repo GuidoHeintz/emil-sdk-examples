@@ -1,0 +1,18 @@
+{
+  "vault_id": "vault.customer.actuator.cobot_safe_palletizer",
+  "solver": "Z3_SMT_LIB2",
+  "invariants": [
+    {
+      "id": "INV-ISO15066-FORCE",
+      "expression": "contact_force_n <= 65.0",
+      "severity": "BLOCKING_VETO",
+      "description": "Biokybernetische Schranke nach ISO/TS 15066: Kontaktkraft darf 65 N niemals überschreiten."
+    },
+    {
+      "id": "INV-SAFETY-CURTAIN",
+      "expression": "human_distance_mm >= 150.0",
+      "severity": "BLOCKING_VETO",
+      "description": "Unterschreitet ein Werker den Schutzabstand von 150 mm, löst der Container sofort den Hardware-Not-Halt aus."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "vault_id": "vault.customer.codec.qdf_quality_protocol",
+  "nodes": [
+    {
+      "id": "root_qdf_codec",
+      "label": "Symmetrischer Domain Codec: QDF Qualitäts-Prüfprotokoll v2",
+      "type": "organ_root",
+      "summary": "Bidirektionale Übersetzung zwischen Legacy-Messmaschinen-Dateien und EMIL Wissensgraph."
+    },
+    {
+      "id": "codec_rule_grammar",
+      "label": "QDF Satzaufbau: PART_ID|FEATURE_ID|NOMINAL_MM|ACTUAL_MM|TOL_MM",
+      "type": "code_blueprint",
+      "summary": "Trennzeichen-basiertes Legacy-Format mit Mikrometer-Präzision."
+    }
+  ],
+  "edges": [
+    {
+      "source": "root_qdf_codec",
+      "target": "codec_rule_grammar",
+      "relation": "ENFORCES_RULE"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "vault_id": "vault.customer.driver.siemens_s7_opcua_cell",
+  "nodes": [
+    {
+      "id": "root_s7_driver",
+      "label": "Hardware-HAL: Siemens S7-1500 Fertigungszelle (OPC-UA / Modbus)",
+      "type": "organ_root",
+      "summary": "Kapselt die physische SPS-Verbindung und schaltet Capabilities im HardwareCapabilityGate frei."
+    },
+    {
+      "id": "reg_spindle_rpm",
+      "label": "NodeID ns=4;s=Cell1.Spindle.TargetRPM (Holding Reg 40102)",
+      "type": "capability_feature",
+      "summary": "Erlaubter Bereich: 0 bis 12.000 U/min, Einheit: RPM."
+    },
+    {
+      "id": "reg_coolant_bar",
+      "label": "NodeID ns=4;s=Cell1.Coolant.PressureBar (Holding Reg 40108)",
+      "type": "capability_feature",
+      "summary": "Kühlmitteldruck-Überwachung: Sollwert >= 4,5 bar."
+    }
+  ],
+  "edges": [
+    {
+      "source": "root_s7_driver",
+      "target": "reg_spindle_rpm",
+      "relation": "ENFORCES_RULE"
+    },
+    {
+      "source": "root_s7_driver",
+      "target": "reg_coolant_bar",
+      "relation": "ENFORCES_RULE"
+    }
+  ]
+}

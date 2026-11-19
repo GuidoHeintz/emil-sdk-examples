@@ -1,0 +1,18 @@
+{
+  "vault_id": "vault.customer.knowledge.flange_assembly_wn104",
+  "solver": "Z3_SMT_LIB2",
+  "invariants": [
+    {
+      "id": "INV-WN104-TORQUE",
+      "expression": "tightening_torque_nm <= 420.0",
+      "severity": "CRITICAL",
+      "description": "Maximales Anzugsdrehmoment für M24 10.9 Flanschschrauben darf 420 Nm niemals überschreiten."
+    },
+    {
+      "id": "INV-WN104-STAGES",
+      "expression": "tightening_stages >= 3",
+      "severity": "HIGH",
+      "description": "Überkreuz-Anzug muss zwingend in mindestens 3 Stufen (30%, 70%, 100%) erfolgen."
+    }
+  ]
+}

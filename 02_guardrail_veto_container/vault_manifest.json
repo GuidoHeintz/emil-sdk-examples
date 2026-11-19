@@ -1,0 +1,78 @@
+{
+  "$schema": "https://axongraph.com/schemas/vault-manifest/v2.json",
+  "manifest_version": "2.0.0",
+  "vault": {
+    "id": "vault.customer.guardrail.procurement_four_eyes_sod",
+    "name": "Kunden-Wächter-Container: Einkaufs-Compliance & 4-Augen-Freigabe (SoD)",
+    "version": "1.0.0",
+    "category": "COMPLIANCE_GUARDRAIL",
+    "container_class": "GUARDRAIL_VETO",
+    "organ_type": "SAFETY_GUARD",
+    "io_direction": "INTERNAL",
+    "industry": "FINANCE_ERP",
+    "security_class": "REVISION_SAFE_ISO",
+    "description": "Deterministischer Z3/SMT-Compliance-Wächter für SAP/ERP-Bestellanforderungen: Erzwingt 4-Augen-FIDO2-Signatur ab 10.000 EUR und blockiert gesperrte Lieferanten.",
+    "raw_data_formatted": "14.2 MB",
+    "vault_size_formatted": "6.4 KB",
+    "compression_rate": "99.9%"
+  },
+  "dependencies": {
+    "suite_id": "suite.customer.integration_reference",
+    "suite_name": "Customer Reference Integration Suite",
+    "required_vaults": [],
+    "optional_peer_organs": []
+  },
+  "capabilities": {
+    "codecs": [
+      "erp_purchase_order_veto",
+      "sod_compliance_check"
+    ],
+    "invariants": [
+      "Implies(order_amount_eur > 10000.0, fido2_second_approver_signed == True)",
+      "requester_id != approver_id",
+      "vendor_sanction_listed == False"
+    ]
+  },
+  "data_footprint": {
+    "raw_source_size": "14.2 MB",
+    "compiled_emp_size": "6.4 KB",
+    "compression_ratio": "99.9%",
+    "node_count": 3,
+    "invariant_count": 3
+  },
+  "build_provenance": {
+    "compiler_toolchain": "AxonGraph-EMIL-Customer-SDK-Compiler-v2.0"
+  },
+  "publisher": {
+    "id": "pub.customer.enterprise",
+    "name": "Customer Enterprise Engineering Team",
+    "tier": "THIRD_PARTY_VERIFIED",
+    "pqc_algorithm": "ML-DSA-65"
+  },
+  "licensee": {
+    "company_name": "Muster-Industrie GmbH & Co. KG",
+    "organization_unit": "Werk 1 Stuttgart",
+    "vat_id": "DE123456789",
+    "contract_id": "AXON-2026-CUST-REF",
+    "license_tier": "ENTERPRISE_ANNUAL_SUB"
+  },
+  "hardware_binding": {
+    "node_lock_type": "MACHINE_TPM_ASYMMETRIC",
+    "target_machine_id": "ANY_NODE",
+    "anti_cloning_seed": 20261118
+  },
+  "vector_watermark": {
+    "enabled": true,
+    "traitor_tracing_id": "TRC-MUSTER-INDUSTRIE-vault.customer.guardrail.procurement_four_eyes_sod"
+  },
+  "guardrails": {
+    "vector_veto_enforced": true,
+    "read_only_acl": true,
+    "employee_monitoring_blocked": true
+  },
+  "integrity_and_signatures": {
+    "payload_sha256": "",
+    "store_signature_algorithm": "ML-DSA-65",
+    "store_digital_signature": ""
+  }
+}

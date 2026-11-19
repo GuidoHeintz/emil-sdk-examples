@@ -1,0 +1,20 @@
+{
+  "epl_version": "2.0",
+  "vault_id": "vault.customer.ui.smart_press_cockpit",
+  "entry_point": "ui/cockpit.html",
+  "release_trigger": "on_proof_success",
+  "default_layout": {
+    "type": "card",
+    "title": "Kunden-UI-Container: Smart Presswerk Leitstand & EPL 2.0 Cockpit",
+    "metrics": [
+      "Presskraft (kN)",
+      "Werkzeug-Temperatur (°C)",
+      "Schutzfeld (mm)",
+      "Chargenwert (EUR)"
+    ],
+    "actuators": [
+      "act_plc_stroke",
+      "act_sap_qm"
+    ]
+  }
+}

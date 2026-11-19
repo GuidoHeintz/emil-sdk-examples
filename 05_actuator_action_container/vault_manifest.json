@@ -1,0 +1,77 @@
+{
+  "$schema": "https://axongraph.com/schemas/vault-manifest/v2.json",
+  "manifest_version": "2.0.0",
+  "vault": {
+    "id": "vault.customer.actuator.cobot_safe_palletizer",
+    "name": "Kunden-Aktorik-Container: Closed-Loop Cobot-Palettierer (ISO/TS 15066)",
+    "version": "1.0.0",
+    "category": "ROBOTICS_ACTUATION",
+    "container_class": "ACTUATOR_ACTION",
+    "organ_type": "ACTUATOR_MOTOR",
+    "io_direction": "BIDIRECTIONAL",
+    "industry": "ROBOTICS_AUTOMATION",
+    "security_class": "REVISION_SAFE_ISO",
+    "description": "Closed-Loop Sensorik- & Aktorik-Container: Verarbeitet Laser-Schutzfeld und Greifkraft-Telemetrie in Echtzeit (< 1,5 ms) und begrenzt Kontaktkräfte nach ISO/TS 15066 auf <= 65 N.",
+    "raw_data_formatted": "14.2 MB",
+    "vault_size_formatted": "6.4 KB",
+    "compression_rate": "99.9%"
+  },
+  "dependencies": {
+    "suite_id": "suite.customer.integration_reference",
+    "suite_name": "Customer Reference Integration Suite",
+    "required_vaults": [],
+    "optional_peer_organs": []
+  },
+  "capabilities": {
+    "codecs": [
+      "actuator_cobot_palletize_motion",
+      "safety_reflex_brake_trigger"
+    ],
+    "invariants": [
+      "contact_force_n <= 65.0",
+      "human_distance_mm >= 150.0"
+    ]
+  },
+  "data_footprint": {
+    "raw_source_size": "14.2 MB",
+    "compiled_emp_size": "6.4 KB",
+    "compression_ratio": "99.9%",
+    "node_count": 2,
+    "invariant_count": 2
+  },
+  "build_provenance": {
+    "compiler_toolchain": "AxonGraph-EMIL-Customer-SDK-Compiler-v2.0"
+  },
+  "publisher": {
+    "id": "pub.customer.enterprise",
+    "name": "Customer Enterprise Engineering Team",
+    "tier": "THIRD_PARTY_VERIFIED",
+    "pqc_algorithm": "ML-DSA-65"
+  },
+  "licensee": {
+    "company_name": "Muster-Industrie GmbH & Co. KG",
+    "organization_unit": "Werk 1 Stuttgart",
+    "vat_id": "DE123456789",
+    "contract_id": "AXON-2026-CUST-REF",
+    "license_tier": "ENTERPRISE_ANNUAL_SUB"
+  },
+  "hardware_binding": {
+    "node_lock_type": "MACHINE_TPM_ASYMMETRIC",
+    "target_machine_id": "ANY_NODE",
+    "anti_cloning_seed": 20261118
+  },
+  "vector_watermark": {
+    "enabled": true,
+    "traitor_tracing_id": "TRC-MUSTER-INDUSTRIE-vault.customer.actuator.cobot_safe_palletizer"
+  },
+  "guardrails": {
+    "vector_veto_enforced": true,
+    "read_only_acl": true,
+    "employee_monitoring_blocked": true
+  },
+  "integrity_and_signatures": {
+    "payload_sha256": "",
+    "store_signature_algorithm": "ML-DSA-65",
+    "store_digital_signature": ""
+  }
+}
