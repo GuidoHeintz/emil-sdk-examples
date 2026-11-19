@@ -17,7 +17,7 @@ No GPU, no Docker, no external Python packages required — pure Python 3.9+:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/axongraph/emil-sdk-examples.git
+git clone https://github.com/GuidoHeintz/emil-sdk-examples.git
 cd emil-sdk-examples
 
 # 2. Compile all 6 reference templates into `.emp` AI Containers (in dist/)
